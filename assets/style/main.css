@@ -1,0 +1,174 @@
+@charset "UTF-8";
+/* ==========================
+Variables
+========================== */
+/* ==========================
+Slots (créneaux)
+========================== */
+.slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.slot {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #f3f4f6;
+  transition: 0.3s;
+  position: relative;
+}
+.slot:hover:not(.disabled):not(.locked) {
+  background: rgb(239.4, 239.7, 253.6);
+}
+.slot.disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
+.slot.selected {
+  background: #6366f1;
+  color: white;
+}
+.slot.locked {
+  background: #374151;
+  color: white;
+}
+.slot.locked::after {
+  content: " 🔒";
+  font-size: 0.9rem;
+}
+
+/* ==========================
+Global styles
+========================== */
+body {
+  font-family: Arial, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.step-section {
+  display: none;
+}
+.step-section.active {
+  display: block;
+}
+
+/* ==========================
+Buttons
+========================== */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #6366f1;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+.btn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
+.btn:hover:not(:disabled) {
+  background: #4f46e5;
+}
+
+/* ==========================
+Calendar (7 jours)
+========================== */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.calendar .day {
+  padding: 10px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 0.85rem;
+  text-align: center;
+}
+.calendar .day:hover {
+  background: white;
+}
+.calendar .day.selected {
+  background: #6366f1;
+  color: white;
+  font-weight: bold;
+}
+
+/* ==========================
+Confirmation
+========================== */
+.confirmation {
+  text-align: center;
+}
+.confirmation .checkmark {
+  font-size: 2rem;
+  color: #6366f1;
+  margin-bottom: 10px;
+  animation: pop 0.5s ease;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* ==========================
+Progress bar
+========================== */
+.progress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.progress .step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #d1d5db;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.progress .step.active {
+  background: #6366f1;
+}/*# sourceMappingURL=main.css.map */

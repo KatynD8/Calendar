@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Outil de réservation - Démo</title>
+    <link rel="stylesheet" href="./assets/style/main.css" />
+  </head>
+  <body>
+    <main class="container">
+      <!-- Progress bar -->
+      <div id="progress" class="progress">
+        <div class="step active">1</div>
+        <div class="step">2</div>
+        <div class="step">3</div>
+        <div class="step">✔</div>
+      </div>
+
+      <!-- Étape 1 : Choix de la date -->
+      <section id="step1" class="step-section active">
+        <h1>Choisissez une date</h1>
+        <div class="calendar">
+          <!-- Exemple : jours générés par JS -->
+        </div>
+        <button id="nextToSlots" class="btn" disabled>Suivant</button>
+      </section>
+
+      <!-- Étape 2 : Choix du créneau -->
+      <section id="step2" class="step-section">
+        <h1>Choisissez un créneau</h1>
+        <div class="slots">
+          <button class="slot">10h00</button>
+          <button class="slot">11h30</button>
+          <button class="slot disabled" disabled>13h00</button>
+          <button class="slot">14h30</button>
+        </div>
+        <button id="nextToForm" class="btn" disabled>Suivant</button>
+      </section>
+
+      <!-- Étape 3 : Formulaire -->
+      <section id="step3" class="step-section">
+        <h1>Vos informations</h1>
+        <form id="bookingForm">
+          <input type="text" id="name" placeholder="Votre nom" required />
+          <input type="email" id="email" placeholder="Votre email" required />
+          <textarea id="message" placeholder="Message (optionnel)"></textarea>
+          <button type="submit" class="btn">Réserver</button>
+        </form>
+      </section>
+
+      <!-- Étape 4 : Confirmation -->
+      <section id="step4" class="step-section">
+        <div class="confirmation">
+          <div class="checkmark">✔</div>
+          <h1>Réservation confirmée 🎉</h1>
+          <p>Merci, nous avons bien enregistré votre demande.</p>
+          <button id="restart" class="btn">Nouvelle réservation</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="./main.js"></script>
+  </body>
+</html>

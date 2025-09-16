@@ -1,0 +1,30 @@
+/* ==========================
+Calendar (7 jours)
+========================== */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+
+  .day {
+    padding: 10px;
+    background: $gray-light;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.85rem;
+    text-align: center;
+
+    &:hover {
+      background: lighten($primary, 35%);
+    }
+
+    &.selected {
+      background: $primary;
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
