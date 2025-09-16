@@ -2,63 +2,285 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Outil de réservation - Démo</title>
-    <link rel="stylesheet" href="./assets/style/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vintage Dashboard — Demo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="./styles/main.css" />
   </head>
   <body>
-    <main class="container">
-      <!-- Progress bar -->
-      <div id="progress" class="progress">
-        <div class="step active">1</div>
-        <div class="step">2</div>
-        <div class="step">3</div>
-        <div class="step">✔</div>
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Vintage Dashboard</h1>
       </div>
 
-      <!-- Étape 1 : Choix de la date -->
-      <section id="step1" class="step-section active">
-        <h1>Choisissez une date</h1>
-        <div class="calendar">
-          <!-- Exemple : jours générés par JS -->
+      <div class="header-actions">
+        <button
+          class="btn ghost"
+          id="resetDemoBtn"
+          title="Réinitialiser la démo"
+        >
+          Réinitialiser
+        </button>
+        <button
+          class="btn primary"
+          id="newEventBtn"
+          title="Ajouter un événement"
+        >
+          + Nouvel événement
+        </button>
+      </div>
+
+      <!-- ✅ Icônes sociales -->
+      <div class="social-icons">
+        <a href="mailto:ton.email@pro.com" class="icon-btn" title="Email">
+          <i class="fa-solid fa-envelope"></i>
+          <span class="notif-badge mail">6</span>
+        </a>
+        <a
+          href="https://wa.me/33612345678"
+          target="_blank"
+          class="icon-btn"
+          title="WhatsApp"
+        >
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a
+          href="https://www.linkedin.com/in/tonprofil"
+          target="_blank"
+          class="icon-btn"
+          title="LinkedIn"
+        >
+          <i class="fa-brands fa-linkedin"></i>
+          <span class="notif-badge linkedin">3</span>
+        </a>
+        <a
+          href="https://github.com/tonprofil"
+          target="_blank"
+          class="icon-btn"
+          title="GitHub"
+        >
+          <i class="fa-brands fa-github"></i>
+          <span class="notif-badge github">1</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <!-- Week calendar -->
+      <section class="calendar-wrap">
+        <div class="week-nav">
+          <button class="nav-btn" id="prevWeek" aria-label="Semaine précédente">
+            ⟵
+          </button>
+          <div class="week-title" id="weekTitle">Semaine</div>
+          <button class="nav-btn" id="nextWeek" aria-label="Semaine suivante">
+            ⟶
+          </button>
+          <div class="hint" style="margin-left: auto">
+            1) Choisir un jour • 2) Choisir un créneau • 3) Nommer & confirmer
+          </div>
         </div>
-        <button id="nextToSlots" class="btn" disabled>Suivant</button>
+        <div
+          class="week-calendar"
+          id="weekCalendar"
+          aria-label="Calendrier de la semaine"
+        ></div>
       </section>
 
-      <!-- Étape 2 : Choix du créneau -->
-      <section id="step2" class="step-section">
-        <h1>Choisissez un créneau</h1>
-        <div class="slots">
-          <button class="slot">10h00</button>
-          <button class="slot">11h30</button>
-          <button class="slot disabled" disabled>13h00</button>
-          <button class="slot">14h30</button>
+      <!-- Slot booker -->
+      <section class="slot-booker" id="slotBooker" aria-live="polite">
+        <div class="slot-booker-header">
+          <div id="slotTitle" style="font-weight: 600"></div>
+          <div class="hint">Créneaux de 1 h, 08:00 → 18:00</div>
+          <button class="btn ghost small" id="closeSlotBooker" title="Fermer">
+            ✕
+          </button>
         </div>
-        <button id="nextToForm" class="btn" disabled>Suivant</button>
-      </section>
-
-      <!-- Étape 3 : Formulaire -->
-      <section id="step3" class="step-section">
-        <h1>Vos informations</h1>
-        <form id="bookingForm">
-          <input type="text" id="name" placeholder="Votre nom" required />
-          <input type="email" id="email" placeholder="Votre email" required />
-          <textarea id="message" placeholder="Message (optionnel)"></textarea>
-          <button type="submit" class="btn">Réserver</button>
+        <div class="slots-grid" id="slotsGrid"></div>
+        <form class="booking-form" id="bookingForm" style="display: none">
+          <input
+            class="input"
+            id="eventTitle"
+            type="text"
+            placeholder="Nom de l’événement (ex: Call client)"
+            aria-label="Nom de l’événement"
+            required
+          />
+          <select id="eventDuration" class="input" aria-label="Durée">
+            <option value="30">30 min</option>
+            <option value="60" selected>1 h</option>
+            <option value="90">1 h 30</option>
+            <option value="120">2 h</option>
+          </select>
+          <button class="btn primary" id="confirmBtn" type="submit">
+            Réserver
+          </button>
         </form>
       </section>
 
-      <!-- Étape 4 : Confirmation -->
-      <section id="step4" class="step-section">
-        <div class="confirmation">
-          <div class="checkmark">✔</div>
-          <h1>Réservation confirmée 🎉</h1>
-          <p>Merci, nous avons bien enregistré votre demande.</p>
-          <button id="restart" class="btn">Nouvelle réservation</button>
+      <!-- Main layout -->
+      <section class="layout">
+        <!-- Todo panel -->
+        <article class="panel todo-panel">
+          <div class="todo-header">
+            <div style="font-weight: 600">To-Do List</div>
+            <span class="hint" id="todoCounter"></span>
+          </div>
+          <div class="todo-input">
+            <input
+              id="todoInput"
+              class="input"
+              placeholder="Ajouter une tâche…"
+              aria-label="Ajouter une tâche"
+            />
+            <button class="btn" id="addTodoBtn">Ajouter</button>
+          </div>
+          <div class="todo-list" id="todoList" aria-live="polite"></div>
+        </article>
+
+        <!-- Right column -->
+        <div class="right-col">
+          <article class="panel next-event" id="nextEvent">
+            <div class="next-badge">Prochain event</div>
+            <div class="next-info">
+              <div id="nextEventTitle" style="font-weight: 600"></div>
+              <div id="nextEventMeta" class="hint"></div>
+            </div>
+          </article>
+
+          <div class="bottom">
+            <!-- Notes -->
+            <article class="panel notes">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <div style="font-weight: 600">Bloc-notes</div>
+                <span class="hint" id="notesStatus">Enregistré</span>
+              </div>
+              <textarea
+                id="notesArea"
+                class="input"
+                placeholder="Écrire des notes…"
+              ></textarea>
+            </article>
+
+            <!-- Pomodoro -->
+            <article class="panel pomodoro">
+              <div class="timer-wrap">
+                <svg
+                  class="timer-svg"
+                  viewBox="0 0 120 120"
+                  width="140"
+                  height="140"
+                >
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="54"
+                    stroke="rgba(255,255,255,.08)"
+                    stroke-width="12"
+                    fill="none"
+                  ></circle>
+                  <circle
+                    id="progress"
+                    cx="60"
+                    cy="60"
+                    r="54"
+                    stroke="url(#grad)"
+                    stroke-width="12"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-dasharray="339.292"
+                    stroke-dashoffset="339.292"
+                  ></circle>
+                  <defs>
+                    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#7c5cff"></stop>
+                      <stop offset="100%" stop-color="#3ed1b8"></stop>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div id="timerLabel">25:00</div>
+              </div>
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 8px;
+                  "
+                >
+                  <span class="pill" id="modePill">Focus</span>
+                  <span class="hint">25/5 par défaut</span>
+                </div>
+                <div class="timer-controls">
+                  <button class="btn" id="startTimer">Démarrer</button>
+                  <button class="btn" id="pauseTimer">Pause</button>
+                  <button class="btn" id="resetTimer">Reset</button>
+                  <button class="btn ghost" id="skipTimer">⟶ Skip</button>
+                  <button class="btn ghost" id="settingsTimer">⚙︎</button>
+                </div>
+                <div class="hint" id="pomoStatus" style="margin-top: 6px">
+                  Prêt
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
     </main>
 
-    <script src="./main.js"></script>
+    <!-- Confirmation Overlay -->
+    <div
+      id="confirmOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirmTitle"
+    >
+      <div class="confirm-card">
+        <div class="confetti" aria-hidden="true"></div>
+        <div class="check">
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <h2 id="confirmTitle" style="margin: 6px 0 4px">
+          Réservation confirmée
+        </h2>
+        <p id="confirmText" class="hint" style="margin: 0 0 16px">
+          Votre événement est bien enregistré.
+        </p>
+        <button class="btn primary" id="closeConfirm">OK</button>
+      </div>
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>

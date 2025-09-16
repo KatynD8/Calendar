@@ -1,0 +1,54 @@
+.pomodoro {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.timer-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+
+  .timer-svg {
+    transform: rotate(-90deg);
+  }
+
+  #timerLabel {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 22px;
+  }
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .btn {
+    flex: 1 0 auto;
+  }
+}
+
+#pomoStatus {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}

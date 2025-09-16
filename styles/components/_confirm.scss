@@ -1,0 +1,75 @@
+#confirmOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 12, 16, 0.6);
+  backdrop-filter: blur(6px);
+  z-index: 20;
+
+  &.active {
+    display: flex;
+  }
+}
+
+.confirm-card {
+  width: min(560px, 92vw);
+  text-align: center;
+  background: linear-gradient(180deg, #171b25, #141821);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.check {
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #37c3ac, #2fbda6);
+  margin: 0 auto 10px;
+  display: grid;
+  place-items: center;
+  animation: pop 0.4s ease-out both;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.8;
+
+  span {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    background: var(--accent);
+    top: -12px;
+    border-radius: 2px;
+    animation: drop 1.4s ease-in forwards;
+
+    &:nth-child(odd) {
+      background: var(--accent-2);
+    }
+  }
+}
+
+@keyframes drop {
+  to {
+    transform: translateY(520px) rotate(340deg);
+  }
+}
