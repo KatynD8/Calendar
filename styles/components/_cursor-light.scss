@@ -1,0 +1,63 @@
+.cursor-light {
+  position: fixed;
+  width: clamp(200px, 30vw, 400px);
+  height: clamp(200px, 30vw, 400px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(124, 92, 255, 0.12),
+    transparent 70%
+  );
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  transition: top 0.15s ease, left 0.15s ease;
+  animation: pulseLight 6s infinite alternate ease-in-out;
+
+  &.main {
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.06),
+      transparent 60%
+    );
+  }
+  &.accent {
+    background: radial-gradient(
+      circle,
+      rgba(124, 92, 255, 0.15),
+      transparent 70%
+    );
+  }
+  &.accent-2 {
+    background: radial-gradient(
+      circle,
+      rgba(62, 209, 184, 0.15),
+      transparent 70%
+    );
+  }
+}
+
+@keyframes pulseLight {
+  0% {
+    background: radial-gradient(
+      circle,
+      rgba(124, 92, 255, 0.12),
+      transparent 70%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      circle,
+      rgba(62, 209, 184, 0.12),
+      transparent 70%
+    );
+  }
+  100% {
+    background: radial-gradient(
+      circle,
+      rgba(124, 92, 255, 0.12),
+      transparent 70%
+    );
+  }
+}

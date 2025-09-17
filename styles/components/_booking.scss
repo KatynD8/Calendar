@@ -1,14 +1,22 @@
+/* ===============================
+   Slot Booker
+   =============================== */
 .slot-booker {
-  background: rgba(20, 24, 33, 0.35);
+  background: rgba(20, 24, 33, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 20px;
   display: none;
-  backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
 
   &.active {
     display: block;
-    animation: slideDown 0.3s ease;
+    animation: slideDown 0.35s ease-out forwards;
+  }
+
+  &.closing {
+    animation: slideUpFade 0.3s ease-in forwards;
   }
 }
 
@@ -17,71 +25,124 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+
+  .title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+  }
 
   .btn.small {
-    padding: 4px 10px;
+    padding: 4px 12px;
     font-size: 14px;
     border-radius: 8px;
   }
 }
 
+/* ===============================
+   Slots Grid
+   =============================== */
 .slots-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
 .slot {
-  border: 1px solid rgba(255, 255, 255, 0.06);
-
-  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 10px;
   text-align: center;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.04);
-  transition: 0.2s transform, 0.2s border-color, 0.2s background;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: 0.25s transform, 0.25s border-color, 0.25s background;
 
   &:hover {
-    transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.14);
+    transform: translateY(-2px) scale(1.02);
+    border-color: var(--accent);
+    background: rgba(124, 92, 255, 0.18);
+    box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
   }
 
   &.busy {
-    opacity: 0.5;
+    opacity: 0.55;
     cursor: not-allowed;
     text-decoration: line-through;
+    background: rgba(255, 107, 107, 0.25);
+    border-color: rgba(255, 107, 107, 0.7);
   }
 
   &.selected {
-    outline: 2px solid var(--accent);
+    border: 2px solid var(--accent);
+    background: rgba(124, 92, 255, 0.3);
+    box-shadow: 0 0 14px rgba(124, 92, 255, 0.45);
+    transform: scale(1.03);
   }
 }
 
+/* ===============================
+   Booking Form
+   =============================== */
 .booking-form {
-  margin-top: 12px;
+  margin-top: 16px;
   display: grid;
   grid-template-columns: 1.2fr 0.8fr auto;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
 
   .input,
   select {
     width: 100%;
-    padding: 10px 12px;
+    padding: 12px 14px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.03);
     color: var(--text);
+    font-size: 0.95rem;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus-visible {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.35);
+    }
+
+    &::placeholder {
+      color: var(--muted);
+    }
+  }
+
+  .btn.primary {
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
   }
 }
 
+/* ===============================
+   Animations
+   =============================== */
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-14px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
   }
 }

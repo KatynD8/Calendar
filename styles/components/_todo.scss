@@ -1,39 +1,77 @@
+/* ===============================
+   Panel To-Do
+   =============================== */
 .todo-panel {
   padding: 16px;
   background: var(--panel);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
+/* Header du panel */
 .todo-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+
+  .title {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+
+  #todoCounter {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
 }
 
+/* Zone d’ajout */
 .todo-input {
   display: flex;
   gap: 8px;
 
   input {
     flex: 1;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    font-size: var(--fs-md);
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  }
+
+  .btn {
+    padding: 10px 14px;
+    font-size: var(--fs-sm);
+    font-weight: 600;
   }
 }
 
+/* Liste des tâches */
 .todo-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
+/* Item */
 .todo-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
+  padding: 10px 12px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   background: linear-gradient(
@@ -41,23 +79,45 @@
     rgba(255, 255, 255, 0.03),
     rgba(255, 255, 255, 0.02)
   );
-
-  &.completed {
-    opacity: 0.7;
-    text-decoration: line-through;
-  }
-}
-
-.icon-btn {
-  background: transparent;
-  border: none;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text);
+    transform: translateX(4px);
+    background: rgba(124, 92, 255, 0.15);
+    cursor: pointer;
+  }
+
+  &.completed {
+    opacity: 0.75;
+    text-decoration: line-through;
+    background: rgba(62, 209, 184, 0.12);
+    border-color: rgba(62, 209, 184, 0.5);
+
+    &::after {
+      content: "✔";
+      margin-left: auto;
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+  }
+
+  .icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
   }
 }

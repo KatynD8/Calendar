@@ -3,14 +3,20 @@ import { state } from "./state.js";
 import { storage } from "./storage.js";
 import { updateNextEvent } from "./next-event.js";
 import { showConfirmation } from "./confirm.js";
-import { renderWeek } from "./calendar.js"; // ✅ ajout
+import { renderWeek } from "./calendar.js";
 
 const slotBooker = $("#slotBooker");
 const slotsGrid = $("#slotsGrid");
 const slotTitle = $("#slotTitle");
+const START_HOUR = 8;
+const END_HOUR = 18;
+const SLOT_STEP = 60; // minutes → garder cohérent avec calendar.js
+const SLOT_COUNT = (END_HOUR - START_HOUR) * (60 / SLOT_STEP);
 
 export function openSlotBooker(keepSelected = false) {
+  slotBooker.classList.remove("closing");
   slotBooker.classList.add("active");
+
   const d = new Date(state.selectedDate);
   slotTitle.textContent = `Créneaux du ${d.toLocaleDateString("fr-FR", {
     weekday: "long",
@@ -32,19 +38,21 @@ function renderSlots() {
   slotsGrid.innerHTML = "";
 
   const dayEvents = state.events.filter((e) => e.date === state.selectedDate);
-  const busyMatrix = Array(10).fill(false);
+  const busyMatrix = Array(SLOT_COUNT).fill(false);
 
+  // Marquer les créneaux occupés
   dayEvents.forEach((e) => {
     const [h] = e.time.split(":").map(Number);
-    const idx = h - 8; // START_HOUR = 8
-    const span = Math.ceil(e.duration / 60);
+    const idx = (h - START_HOUR) / (SLOT_STEP / 60);
+    const span = Math.ceil(e.duration / SLOT_STEP);
     for (let i = 0; i < span; i++) {
       if (idx + i < busyMatrix.length) busyMatrix[idx + i] = true;
     }
   });
 
-  for (let i = 0; i < 10; i++) {
-    const h = 8 + i;
+  // Générer les créneaux
+  for (let i = 0; i < SLOT_COUNT; i++) {
+    const h = START_HOUR + i * (SLOT_STEP / 60);
     const label = `${String(h).padStart(2, "0")}:00`;
 
     const b = document.createElement("button");
@@ -54,6 +62,7 @@ function renderSlots() {
       (busyMatrix[i] ? " busy" : "") +
       (state.selectedSlot === label ? " selected" : "");
     b.textContent = label;
+    b.setAttribute("aria-label", label);
 
     if (!busyMatrix[i]) {
       b.addEventListener("click", () => {
@@ -63,6 +72,9 @@ function renderSlots() {
         $("#bookingForm").style.display = "grid";
         $("#eventTitle").focus();
       });
+    } else {
+      b.disabled = true;
+      b.setAttribute("aria-disabled", "true");
     }
 
     slotsGrid.appendChild(b);
@@ -77,9 +89,20 @@ $("#newEventBtn").onclick = () => {
   openSlotBooker();
 };
 
-// Bouton "Fermer"
+// Bouton "Fermer" (avec animation)
 $("#closeSlotBooker").addEventListener("click", () => {
-  slotBooker.classList.remove("active");
+  slotBooker.classList.add("closing");
+  slotBooker.addEventListener(
+    "animationend",
+    () => {
+      if (slotBooker.classList.contains("closing")) {
+        slotBooker.classList.remove("closing", "active");
+        slotBooker.style.display = "none";
+      }
+    },
+    { once: true }
+  );
+
   state.selectedDate = null;
   state.selectedSlot = null;
   $("#bookingForm").style.display = "none";
@@ -92,6 +115,15 @@ $("#bookingForm").addEventListener("submit", (e) => {
   const duration = parseInt($("#eventDuration").value, 10);
 
   if (!state.selectedSlot || !title) return;
+
+  // Vérif conflit
+  const conflict = state.events.find(
+    (ev) => ev.date === state.selectedDate && ev.time === state.selectedSlot
+  );
+  if (conflict) {
+    alert("⚠️ Ce créneau est déjà réservé.");
+    return;
+  }
 
   const btn = $("#confirmBtn");
   btn.disabled = true;
@@ -117,6 +149,6 @@ $("#bookingForm").addEventListener("submit", (e) => {
 
     showConfirmation(title);
     updateNextEvent();
-    renderWeek(); // ✅ rafraîchit le calendrier pour marquer la case busy
+    renderWeek();
   }, 600);
 });

@@ -4,10 +4,12 @@ import { state } from "./state.js";
 const titleEl = $("#nextEventTitle");
 const metaEl = $("#nextEventMeta");
 
-const fmtLong = new Intl.DateTimeFormat("fr-FR", {
-  weekday: "long",
+const fmtDate = new Intl.DateTimeFormat("fr-FR", {
+  weekday: "short",
   day: "2-digit",
-  month: "long",
+  month: "2-digit",
+});
+const fmtTime = new Intl.DateTimeFormat("fr-FR", {
   hour: "2-digit",
   minute: "2-digit",
 });
@@ -15,14 +17,25 @@ const fmtLong = new Intl.DateTimeFormat("fr-FR", {
 export function updateNextEvent() {
   const now = new Date();
 
-  const upcoming = state.events
-    .map((e) => ({ ...e, dt: new Date(`${e.date}T${e.time}:00`) }))
-    .filter((e) => e.dt >= now)
-    .sort((a, b) => a.dt - b.dt)[0];
+  // 🔎 Cherche le prochain event sans trier toute la liste
+  const upcoming = state.events.reduce((next, e) => {
+    const dt = new Date(`${e.date}T${e.time}:00`);
+    if (dt >= now && (!next || dt < next.dt)) {
+      return { ...e, dt };
+    }
+    return next;
+  }, null);
 
   if (upcoming) {
     titleEl.textContent = upcoming.title;
-    metaEl.textContent = fmtLong.format(upcoming.dt);
+
+    const dateStr = fmtDate.format(upcoming.dt);
+    const timeStr = fmtTime.format(upcoming.dt);
+    const durationStr = upcoming.duration
+      ? ` (${Math.round(upcoming.duration / 60)}h)`
+      : "";
+
+    metaEl.textContent = `${dateStr} — ${timeStr}${durationStr}`;
   } else {
     titleEl.textContent = "Aucun événement à venir";
     metaEl.textContent = "Planifiez votre prochain créneau";

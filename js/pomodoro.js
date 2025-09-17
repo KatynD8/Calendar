@@ -1,4 +1,4 @@
-import { $, $$ } from "./utils.js";
+import { $ } from "./utils.js";
 import { state } from "./state.js";
 import { storage } from "./storage.js";
 
@@ -7,7 +7,7 @@ const timerLabel = $("#timerLabel");
 const modePill = $("#modePill");
 const pomoStatus = $("#pomoStatus");
 
-const CIRC = 2 * Math.PI * 54; // circonférence du cercle SVG
+const CIRC = 2 * Math.PI * 54;
 let tick;
 
 // --- Helpers ---
@@ -18,6 +18,7 @@ function durationFor(mode) {
 function setMode(mode) {
   state.pomo.mode = mode;
   modePill.textContent = mode === "work" ? "Focus" : "Break";
+  modePill.className = "pill " + (mode === "work" ? "focus" : "break"); // 🎨 ajout style
   storage.set("vd_pomo", state.pomo);
 }
 
@@ -27,20 +28,31 @@ function setRemaining(sec) {
   storage.set("vd_pomo", state.pomo);
 }
 
+function formatTime(sec) {
+  const m = Math.floor(sec / 60)
+    .toString()
+    .padStart(2, "0");
+  const s = Math.floor(sec % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${m}:${s}`;
+}
+
 function updateTimerUI() {
   const total = durationFor(state.pomo.mode);
-  const p = 1 - state.pomo.remaining / total;
-  progress.style.strokeDashoffset = String(CIRC * (1 - p));
+  const progressRatio = 1 - state.pomo.remaining / total;
+  progress.style.strokeDashoffset = String(CIRC * (1 - progressRatio));
 
-  const m = Math.floor(state.pomo.remaining / 60)
-    .toString()
-    .padStart(2, "0");
-  const s = Math.floor(state.pomo.remaining % 60)
-    .toString()
-    .padStart(2, "0");
+  timerLabel.textContent = formatTime(state.pomo.remaining);
 
-  timerLabel.textContent = `${m}:${s}`;
-  pomoStatus.textContent = state.pomo.running ? "En cours…" : "Prêt";
+  if (state.pomo.running) {
+    pomoStatus.textContent = "⏳ En cours…";
+  } else if (state.pomo.remaining === total) {
+    pomoStatus.textContent = "Prêt à démarrer";
+  } else {
+    pomoStatus.textContent = "⏸️ En pause";
+  }
+  pomoStatus.setAttribute("aria-live", "polite"); // ✅ accessibilité
 }
 
 // --- Core functions ---
@@ -54,7 +66,7 @@ function startTimer() {
     if (state.pomo.remaining > 0) {
       setRemaining(state.pomo.remaining - 1);
     } else {
-      beep();
+      notifyPhaseEnd();
       nextPhase();
     }
   }, 1000);
@@ -79,12 +91,9 @@ function resetTimer() {
 
 function nextPhase() {
   pauseTimer();
-  if (state.pomo.mode === "work") {
-    setMode("rest");
-  } else {
-    setMode("work");
-  }
-  setRemaining(durationFor(state.pomo.mode));
+  const nextMode = state.pomo.mode === "work" ? "rest" : "work";
+  setMode(nextMode);
+  setRemaining(durationFor(nextMode));
   startTimer();
 }
 
@@ -92,8 +101,8 @@ function skipPhase() {
   nextPhase();
 }
 
-// Petit bip sonore
-function beep() {
+// ✅ Notification sonore + visuelle
+function notifyPhaseEnd() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const o = ctx.createOscillator();
@@ -106,10 +115,13 @@ function beep() {
     setTimeout(() => {
       o.stop();
       ctx.close();
-    }, 160);
+    }, 200);
   } catch (e) {
     console.warn("Beep non supporté", e);
   }
+
+  // 🔔 Ajout visuel
+  pomoStatus.textContent = "✔️ Phase terminée !";
 }
 
 // --- Init ---

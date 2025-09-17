@@ -4,72 +4,154 @@
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 12, 16, 0.6);
-  backdrop-filter: blur(6px);
+  background: rgba(10, 12, 16, 0.65);
+  backdrop-filter: blur(8px);
   z-index: 20;
+  animation: fadeIn 0.3s ease-out;
 
   &.active {
     display: flex;
   }
 }
 
-.confirm-card {
-  width: min(560px, 92vw);
-  text-align: center;
-  background: linear-gradient(180deg, #171b25, #141821);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  padding: 28px;
-  box-shadow: var(--shadow);
-  position: relative;
-  overflow: hidden;
-}
-
-.check {
-  width: 84px;
-  height: 84px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #37c3ac, #2fbda6);
-  margin: 0 auto 10px;
-  display: grid;
-  place-items: center;
-  animation: pop 0.4s ease-out both;
-}
-
-@keyframes pop {
+@keyframes fadeIn {
   from {
-    transform: scale(0.6);
-    opacity: 0.4;
+    opacity: 0;
   }
   to {
-    transform: scale(1);
     opacity: 1;
   }
 }
 
+.confirm-card {
+  width: min(520px, 92vw);
+  text-align: center;
+  background: linear-gradient(180deg, #1b1f2b, #141821);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 32px 28px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.35s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ✅ Check animé */
+.check {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--accent-2), var(--ok));
+  margin: 0 auto 14px;
+  display: grid;
+  place-items: center;
+  animation: pop 0.4s ease-out both, glow 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 8px rgba(62, 209, 184, 0.4);
+  }
+  to {
+    box-shadow: 0 0 18px rgba(62, 209, 184, 0.7);
+  }
+}
+
+/* ✅ Confetti variés */
 .confetti {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.9;
 
   span {
     position: absolute;
-    width: 8px;
-    height: 12px;
+    width: 6px;
+    height: 14px;
     background: var(--accent);
-    top: -12px;
+    top: -14px;
     border-radius: 2px;
-    animation: drop 1.4s ease-in forwards;
+    animation: drop 2.2s ease-in forwards;
+    transform: rotate(0deg);
 
     &:nth-child(odd) {
       background: var(--accent-2);
+    }
+    &:nth-child(3n) {
+      background: var(--ok);
+    }
+    &:nth-child(4n) {
+      background: var(--danger);
+    }
+
+    /* tailles & vitesses variées */
+    &:nth-child(1n) {
+      width: 6px;
+      height: 12px;
+      animation-duration: 1.8s;
+    }
+    &:nth-child(2n) {
+      width: 8px;
+      height: 16px;
+      animation-duration: 2.4s;
+    }
+    &:nth-child(3n) {
+      width: 10px;
+      height: 20px;
+      animation-duration: 2.8s;
     }
   }
 }
 
 @keyframes drop {
   to {
-    transform: translateY(520px) rotate(340deg);
+    transform: translateY(580px) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+/* ✅ Texte */
+.confirm-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 10px 0 6px;
+  color: var(--text);
+}
+
+.confirm-card p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* ✅ Bouton OK mis en valeur */
+.confirm-card .btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 12px 22px;
+  border-radius: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 18px rgba(124, 92, 255, 0.5);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 }

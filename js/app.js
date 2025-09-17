@@ -4,6 +4,7 @@ import { initNotes } from "./notes.js";
 import { initPomodoro } from "./pomodoro.js";
 import { updateNextEvent } from "./next-event.js";
 import { state } from "./state.js";
+import { initBackground } from "./background.js"; // ✅ NEW
 
 function resetDemo() {
   if (confirm("Réinitialiser les données locales ?")) {
@@ -39,6 +40,7 @@ function boot() {
   initNotes();
   initPomodoro();
   updateNextEvent();
+  initBackground(); // ✅ Appel du background
 
   // Bind bouton reset
   document.querySelector("#resetDemoBtn").onclick = resetDemo;

@@ -1,0 +1,33 @@
+export function initBackground() {
+  const lights = document.querySelectorAll(".cursor-light");
+  if (!lights.length) return;
+
+  let targetX = window.innerWidth / 2;
+  let targetY = window.innerHeight / 2;
+  let currentX = targetX;
+  let currentY = targetY;
+
+  function animate() {
+    currentX += (targetX - currentX) * 0.12;
+    currentY += (targetY - currentY) * 0.12;
+
+    lights.forEach((light, i) => {
+      const offset = i * 20; // décalage progressif pour variété
+      light.style.transform = `translate(${currentX - 200 + offset}px, ${currentY - 200 + offset}px)`;
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  document.addEventListener("mousemove", (e) => {
+    targetX = e.pageX;
+    targetY = e.pageY;
+  });
+
+  // Mobile → désactive halos
+  if ("ontouchstart" in window) {
+    lights.forEach((l) => (l.style.display = "none"));
+  }
+
+  animate();
+}
